@@ -7,7 +7,7 @@ from flaskext.mysql import MySQL
 db = MySQL()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__,template_folder='templates')
     
     # secret key that will be used for securely signing the session 
     # cookie and can be used for any other security related needs by 
@@ -47,6 +47,6 @@ def create_app():
     
     @app.errorhandler(404)
     def page_not_found(e):
-        return render_template('404.html'), 404
+        return render_template('/templates/404.html'), 404
 
     return app
