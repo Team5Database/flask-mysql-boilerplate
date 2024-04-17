@@ -1,6 +1,6 @@
 # Some set up for the application 
 
-from flask import Flask
+from flask import Flask, render_template
 from flaskext.mysql import MySQL
 
 # create a MySQL object that we will use in other parts of the API
@@ -31,14 +31,22 @@ def create_app():
 
     # Import the various routes
     from src.views import views
-    from src.customers.customers import customers
-    from src.products.products  import products
     from src.layoffs.layoffs import layoffs
+    from src.trends.trends import trends
+    from src.companies.companies import companies
+    from src.forum.forum import forum
+    from src.resources.resources import resources
 
     # Register the routes that we just imported so they can be properly handled
     app.register_blueprint(views,       url_prefix='/v')
-    app.register_blueprint(customers,   url_prefix='/c')
-    app.register_blueprint(products,    url_prefix='/p')
     app.register_blueprint(layoffs,     url_prefix='/layoffs')
+    app.register_blueprint(trends,      url_prefix='/trends')
+    app.register_blueprint(companies,   url_prefix='/companies')
+    app.register_blueprint(forum,       url_prefix='/forum')
+    app.register_blueprint(resources,   url_prefix='/resources')
+    
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
 
     return app
