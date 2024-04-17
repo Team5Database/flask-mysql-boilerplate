@@ -58,14 +58,12 @@ services:
   ##################################################################
   # configure the npm container
   vuejs:
-    image: node:20
+    build: ./vuejs
     container_name: vuejs
     ports:
       - "65173:5173"
     volumes:
       - ./vuejs:/app
-    working_dir: /app
-    command: npm install && npm run dev
     restart: unless-stopped
 
 secrets:
