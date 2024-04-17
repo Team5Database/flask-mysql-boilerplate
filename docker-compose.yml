@@ -58,7 +58,7 @@ services:
   ##################################################################
   # configure the npm container
   vuejs:
-    image: node:16
+    image: node:20
     container_name: vuejs
     ports:
       - "65173:5173"
