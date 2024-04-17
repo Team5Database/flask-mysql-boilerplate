@@ -7,288 +7,85 @@ layoffs;
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users`
 (
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT, -- user id used to identify each user in the database
-    `username`
-    VARCHAR
-(
-    25
-) NOT NULL, -- username used to separate one suer from another
-    `first_name` TEXT NOT NULL, -- gives the user a first name allowing them to
-    `middle_name` TEXT, -- optional field for the users middle name, if applicable.
-    `last_name` TEXT NOT NULL, -- family name or surname required for identification and formal communication.
-    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    PRIMARY KEY
-(
-    `id`
-)
-    );
+    `id`          INT         NOT NULL AUTO_INCREMENT,                             -- user id used to identify each user in the database
+    `username`    VARCHAR(25) NOT NULL,                                            -- username used to separate one suer from another
+    `first_name`  TEXT        NOT NULL,                                            -- gives the user a first name allowing them to
+    `middle_name` TEXT,                                                            -- optional field for the users middle name, if applicable.
+    `last_name`   TEXT        NOT NULL,                                            -- family name or surname required for identification and formal communication.
+    `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    PRIMARY KEY (`id`)
+);
 
 DROP TABLE IF EXISTS `companies`;
 CREATE TABLE IF NOT EXISTS `companies`
 (
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,    -- unique identifier for each company, automatically increments with each new company added
-    `name`
-    TEXT
-    NOT
-    NULL,              -- The official name of the company.
-    `company_size`
-    INT
-    NOT
-    NULL,              -- integer representing the number of employees in the company, required for categorization and analysis.
-    `created_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    PRIMARY
-    KEY
-(
-    `id`
-)
-    );
+    `id`           INT  NOT NULL AUTO_INCREMENT,                                    -- unique identifier for each company, automatically increments with each new company added
+    `name`         TEXT NOT NULL,                                                   -- The official name of the company.
+    `company_size` INT  NOT NULL,                                                   -- integer representing the number of employees in the company, required for categorization and analysis.
+    `created_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    PRIMARY KEY (`id`)
+);
 
 DROP TABLE IF EXISTS `employments`;
 CREATE TABLE IF NOT EXISTS `employments`
 (
-    `user_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the users table, represents which user is employed.
-    `company_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the companies table, represents which company the user is employed at.
-    `employed_at`
-    TIMESTAMP
-    NOT
-    NULL,              -- date and time when the user started their employment at the company.
-    `created_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    FOREIGN
-    KEY
-(
-    `user_id`
-) REFERENCES `users`
-(
-    `id`
-) ON DELETE CASCADE
-  ON UPDATE CASCADE,
-    FOREIGN KEY
-(
-    `company_id`
-) REFERENCES `companies`
-(
-    `id`
-)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE
-    );
+    `user_id`     INT       NOT NULL,                                              -- foreign key linking to the id in the users table, represents which user is employed.
+    `company_id`  INT       NOT NULL,                                              -- foreign key linking to the id in the companies table, represents which company the user is employed at.
+    `employed_at` TIMESTAMP NOT NULL,                                              -- date and time when the user started their employment at the company.
+    `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles`
 (
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,    -- unique identifier for each article, automatically increments with each new article added
-    `title`
-    TEXT
-    NOT
-    NULL,              -- title of the article.
-    `content`
-    TEXT
-    NOT
-    NULL,              -- full text content of the article.
-    `user_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the users table, represents the author of the article.
-    `company_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the companies table, represents the company associated with the article.
-    `created_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    FOREIGN KEY
-(
-    `user_id`
-) REFERENCES `users`
-(
-    `id`
-) ON DELETE CASCADE
-  ON UPDATE CASCADE,
-    FOREIGN KEY
-(
-    `company_id`
-) REFERENCES `companies`
-(
-    `id`
-)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE
-    );
+    `id`         INT  NOT NULL AUTO_INCREMENT,                                    -- unique identifier for each article, automatically increments with each new article added
+    `title`      TEXT NOT NULL,                                                   -- title of the article.
+    `content`    TEXT NOT NULL,                                                   -- full text content of the article.
+    `user_id`    INT  NOT NULL,                                                   -- foreign key linking to the id in the users table, represents the author of the article.
+    `company_id` INT  NOT NULL,                                                   -- foreign key linking to the id in the companies table, represents the company associated with the article.
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 DROP TABLE IF EXISTS `layoffs`;
 CREATE TABLE IF NOT EXISTS `layoffs`
 (
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,    -- unique identifier for each layoff event, automatically increments with each new event added. Primary key of the table.
-    `company_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the companies table, identifies the company that initiated the layoffs.
-    `employee_count`
-    INT
-    NOT
-    NULL,              -- number of employees affected by the layoff.
-    `reason`
-    TEXT
-    NOT
-    NULL,              -- official reason or cause of the layoffs.
-    `occurrence_at`
-    TIMESTAMP
-    NOT
-    NULL,              -- date and time when the layoffs occurred.
-    `created_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    FOREIGN KEY
-(
-    `company_id`
-) REFERENCES `companies`
-(
-    `id`
-) ON DELETE CASCADE
-    );
+    `id`             INT       NOT NULL AUTO_INCREMENT,                               -- unique identifier for each layoff event, automatically increments with each new event added. Primary key of the table.
+    `company_id`     INT       NOT NULL,                                              -- foreign key linking to the id in the companies table, identifies the company that initiated the layoffs.
+    `employee_count` INT       NOT NULL,                                              -- number of employees affected by the layoff.
+    `reason`         TEXT      NOT NULL,                                              -- official reason or cause of the layoffs.
+    `occurrence_at`  TIMESTAMP NOT NULL,                                              -- date and time when the layoffs occurred.
+    `created_at`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`company_id`) REFERENCES `companies` (`id`) ON DELETE CASCADE
+);
 
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts`
 (
-    `id`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,    -- unique identifier for each post, automatically increments with each new post added. Primary key of the table.
-    `title`
-    TEXT
-    NULL,              -- title of the post.
-    `content`
-    TEXT
-    NOT
-    NULL,              -- full text content of the post.
-    `user_id`
-    INT
-    NOT
-    NULL,              -- foreign key linking to the id in the users table, represents the author of the post.
-    `parent_post_id`
-    INT
-    NULL,              -- optional foreign key that links to another id in the posts table, allowing posts to be nested or categorized as responses to other posts.
-    `event_id`
-    INT
-    NULL,              -- optional foreign key linking to the id in the layoffs table, associates the post with a specific layoff event, if relevant.
-    `like_count`
-    INT
-    DEFAULT
-    0,                 -- integer representing the number of likes the post has received. Defaults to 0.
-    `created_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was created, automatically set to the current time.
-    `updated_at`
-    TIMESTAMP
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
-    PRIMARY
-    KEY
-(
-    `id`
-),
-    FOREIGN KEY
-(
-    `user_id`
-) REFERENCES `users`
-(
-    `id`
-) ON DELETE CASCADE
-  ON UPDATE CASCADE,
-    FOREIGN KEY
-(
-    `parent_post_id`
-) REFERENCES `posts`
-(
-    `id`
-)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE,
-    FOREIGN KEY
-(
-    `event_id`
-) REFERENCES `layoffs`
-(
-    `id`
-)
-  ON DELETE CASCADE
-  ON UPDATE CASCADE
-    );
+    `id`             INT  NOT NULL AUTO_INCREMENT,                                    -- unique identifier for each post, automatically increments with each new post added. Primary key of the table.
+    `title`          TEXT NULL,                                                       -- title of the post.
+    `content`        TEXT NOT NULL,                                                   -- full text content of the post.
+    `user_id`        INT  NOT NULL,                                                   -- foreign key linking to the id in the users table, represents the author of the post.
+    `parent_post_id` INT  NULL,                                                       -- optional foreign key that links to another id in the posts table, allowing posts to be nested or categorized as responses to other posts.
+    `event_id`       INT  NULL,                                                       -- optional foreign key linking to the id in the layoffs table, associates the post with a specific layoff event, if relevant.
+    `like_count`     INT       DEFAULT 0,                                             -- integer representing the number of likes the post has received. Defaults to 0.
+    `created_at`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- timestamp that records when the user account was created, automatically set to the current time.
+    `updated_at`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp that records when the user account was last updated, automatically updated to the current time on modifications.
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`parent_post_id`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`event_id`) REFERENCES `layoffs` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Insert Fake Data
 INSERT INTO `users` (`id`, `username`, `first_name`, `middle_name`, `last_name`, `created_at`, `updated_at`)
