@@ -89,7 +89,9 @@ CREATE TABLE IF NOT EXISTS `posts`
 INSERT INTO `users` (`id`, `username`, `first_name`, `middle_name`, `last_name`, `created_at`, `updated_at`)
 VALUES (1, 'gbayliss0', 'Guillermo', NULL, 'Bayliss', '2023-06-15 00:00:00', '2023-11-16 00:00:00'),
        (2, 'aghilardi1', 'Alexi', NULL, 'Ghilardi', '2024-03-01 00:00:00', '2023-09-06 00:00:00'),
-       (3, 'abatalini2', 'Allis', NULL, 'Batalini', '2024-03-03 00:00:00', '2023-04-30 00:00:00');
+       (3, 'abatalini2', 'Allis', NULL, 'Batalini', '2024-03-03 00:00:00', '2023-04-30 00:00:00'),
+       (4, 'jdoe', 'John', 'Michael', 'Doe', '2024-03-03 00:00:00', '2023-04-30 00:00:00'),
+       
 
 INSERT INTO `companies` (`id`, `name`, `company_size`, `created_at`, `updated_at`)
 VALUES (1, 'Yozio', 100, '2023-06-15 00:00:00', '2023-11-16 00:00:00'),
