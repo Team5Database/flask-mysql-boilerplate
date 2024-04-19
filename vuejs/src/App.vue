@@ -135,6 +135,7 @@ export default {
 .container {
 	display: flex;
 	flex: 1;
+	overflow: auto;
 }
 
 .container>.ant-menu {
@@ -150,15 +151,14 @@ export default {
 .container>.wrapper {
 	background: #f4f5f7;
 	flex: 1;
-	overflow: auto;
 }
 
 .content {
-	height: calc(100% - 27px - 7px);
+	height: calc(100% - 27px);
 	margin: 27px 27px 0 27px;
-	padding: 7px 7px 0 7px;
 	background: white;
 	border-radius: 12px 12px 0 0;
+	overflow: auto;
 }
 
 /* Router Transition */
