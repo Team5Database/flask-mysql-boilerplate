@@ -1,11 +1,23 @@
 <template>
 	<div>
-		<a-table :columns="columns" :row-key="record => record.login.uuid" :data-source="dataSource"
-			:pagination="pagination" :loading="loading" @change="handleTableChange"></a-table>
+		<a-table :columns="columns" :row-key="record => record.id" :data-source="dataSource" :pagination="pagination"
+			:loading="loading" @change="handleTableChange">
+			<template #bodyCell="{ record, column, text }">
+				<template v-if="column.dataIndex === 'company_name'">
+					<a @click="goToCompany(record.company_id)">{{ text }}</a>
+				</template>
+				<template v-if="column.dataIndex === 'occurrence_at' || column.dataIndex === 'created_at' || column.dataIndex === 'updated_at'">
+					{{ getDateTimeString(text) }}	
+				</template>
+			</template>
+		</a-table>
 	</div>
 </template>
 
 <script>
+import { Api } from '@/api/api'
+import datetime from '@/utils/datetime'
+
 export default {
 	name: 'LayoffsView',
 	data() {
@@ -19,35 +31,34 @@ export default {
 			},
 			columns: [
 				{
-					title: 'Name',
-					dataIndex: 'name',
-					key: 'name',
-					scopedSlots: { customRender: 'name' },
+					title: 'Company',
+					dataIndex: 'company_name',
+					key: 'company_name',
 				},
 				{
-					title: 'Email',
-					dataIndex: 'email',
-					key: 'email',
+					title: 'Occurrence',
+					dataIndex: 'occurrence_at',
+					key: 'occurrence_at',
 				},
 				{
-					title: 'Phone',
-					dataIndex: 'phone',
-					key: 'phone',
+					title: 'Employee Count',
+					dataIndex: 'employee_count',
+					key: 'employee_count',
 				},
 				{
-					title: 'Location',
-					dataIndex: 'location',
-					key: 'location',
+					title: 'Reason',
+					dataIndex: 'reason',
+					key: 'reason',
 				},
 				{
-					title: 'Date',
-					dataIndex: 'date',
-					key: 'date',
+					title: 'Created At',
+					dataIndex: 'created_at',
+					key: 'created_at',
 				},
 				{
-					title: 'Action',
-					key: 'action',
-					scopedSlots: { customRender: 'action' },
+					title: 'Updated At',
+					dataIndex: 'updated_at',
+					key: 'updated_at',
 				},
 			],
 		}
@@ -57,20 +68,19 @@ export default {
 			this.pagination = pagination
 			this.fetchData()
 		},
+		getDateTimeString(timeStr) {
+			return datetime.toDateTimeString(timeStr)
+		},
+		goToCompany(companyId) {
+			this.$router.push({ name: 'company-detail', params: { id: companyId } })
+		},
 		fetchData() {
 			this.loading = true
-			const { current, pageSize } = this.pagination
-			const url = `https://randomuser.me/api?results=${pageSize}&page=${current}`
-			fetch(url)
-				.then(response => response.json())
-				.then(data => {
+			Api.layoffs.list()
+				.then(response => {
 					this.loading = false
-					this.pagination.total = 200
-					this.dataSource = data.results
-				})
-				.catch(error => {
-					this.loading = false
-					console.error('Fetch data error:', error)
+					this.dataSource = response
+					this.pagination.total = response.length
 				})
 		},
 	},

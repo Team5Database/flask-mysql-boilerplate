@@ -86,7 +86,6 @@ export default {
 	},
 	methods: {
 		handleClick(item) {
-			console.log(this.menu.selectedKeys)
 			this.$router.push(item.key)
 		},
 	},
