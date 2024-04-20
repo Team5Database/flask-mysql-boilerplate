@@ -20,7 +20,7 @@ def get_trends_byevents():
 @trends.route('/bypeople', methods=['GET'])
 def get_trends_bypeople():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT MONTH(created_at) as month, SUM(employee_count) as total_people_laid_off FROM layoffs.layoffs GROUP BY MONTH(created_at)')
+    cursor.execute('SELECT YEAR(created_at) as year, MONTH(created_at) as month, SUM(employee_count) as count FROM layoffs.layoffs GROUP BY YEAR(created_at), MONTH(created_at)')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
