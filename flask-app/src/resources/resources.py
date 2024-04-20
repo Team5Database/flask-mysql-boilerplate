@@ -7,7 +7,7 @@ resources = Blueprint('resources', __name__)
 def get_resources():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT * FROM resources')
+        cursor.execute('SELECT * FROM layoffs.articles')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -20,8 +20,8 @@ def get_resources():
     
     elif request.method == 'POST':
         cursor = db.get_db().cursor()
-        cursor.execute('insert into resources (title, content, user_id) values (%s, %s, %s)', 
-            (request.json['title'], request.json['content'], request.json['user_id']))
+        cursor.execute('INSERT INTO layoffs.articles (title, content, user_id, company_id) values (%s, %s, %s, %s)', 
+            (request.json['title'], request.json['content'], request.json['user_id'], request.json['company_id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post created"}))
         the_response.status_code = 200
@@ -30,8 +30,8 @@ def get_resources():
     
     elif request.method == 'PUT':
         cursor = db.get_db().cursor()
-        cursor.execute('update resources set title=%s, content=%s, user_id=%s where id=%s', 
-            (request.json['title'], request.json['content'], request.json['user_id'], request.json['id']))
+        cursor.execute('update layoffs.articles set title=%s, content=%s, user_id=%s, company_id=%s where id=%s', 
+            (request.json['title'], request.json['content'], request.json['user_id'], request.json['company_id'], request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post updated"}))
         the_response.status_code = 200
@@ -40,7 +40,7 @@ def get_resources():
     
     elif request.method == 'DELETE':
         cursor = db.get_db().cursor()
-        cursor.execute('delete from resources where id = %s', (request.json['id']))
+        cursor.execute('delete from layoffs.articles where id = %s', (request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post deleted"}))
         the_response.status_code = 200

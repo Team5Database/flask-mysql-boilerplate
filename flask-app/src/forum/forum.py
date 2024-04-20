@@ -20,8 +20,8 @@ def get_forum():
     
     elif request.method == 'POST':
         cursor = db.get_db().cursor()
-        cursor.execute('INSERT INTO layoffs.posts (id, title, content, user_id) values (%s, %s, %s, %s)', 
-            (1, request.json['title'], request.json['content'], request.json['user_id']))
+        cursor.execute('INSERT INTO layoffs.posts (title, content, user_id) values (%s, %s, %s, %s)', 
+            (request.json['title'], request.json['content'], 1))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post created"}))
         the_response.status_code = 200
@@ -30,8 +30,8 @@ def get_forum():
     
     elif request.method == 'PUT':
         cursor = db.get_db().cursor()
-        cursor.execute('update forum set title=%s, content=%s, user_id=%s where id=%s', 
-            (request.json['title'], request.json['content'], request.json['user_id'], request.json['id']))
+        cursor.execute('update layoffs.posts set title=%s, content=%s, user_id=%s where id=%s', 
+            (request.json['title'], request.json['content'], 1, request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post updated"}))
         the_response.status_code = 200
@@ -40,7 +40,7 @@ def get_forum():
     
     elif request.method == 'DELETE':
         cursor = db.get_db().cursor()
-        cursor.execute('delete from forum where id = %s', (request.json['id']))
+        cursor.execute('delete from layoffs.posts where id = %s', (request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post deleted"}))
         the_response.status_code = 200
