@@ -3,10 +3,10 @@ from src import db
 
 trends = Blueprint('trends', __name__)
 
-@trends.route('/byevent', methods=['GET'])
-def get_trends_byevent():
+@trends.route('/byevents', methods=['GET'])
+def get_trends_byevents():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT created_at, COUNT(*) as count FROM layoffs.layoffs GROUP BY created_at')
+    cursor.execute('SELECT YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as count FROM layoffs.layoffs GROUP BY YEAR(created_at), MONTH(created_at)')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -20,7 +20,7 @@ def get_trends_byevent():
 @trends.route('/bypeople', methods=['GET'])
 def get_trends_bypeople():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT DATE(created_at) AS layoff_date, SUM(employee_count) AS total_people_laid_off FROM layoffs.layoffs GROUP BY DATE(created_at) ORDER BY layoff_date;')
+    cursor.execute('SELECT YEAR(created_at) as year, MONTH(created_at) as month, SUM(employee_count) as count FROM layoffs.layoffs GROUP BY YEAR(created_at), MONTH(created_at)')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
