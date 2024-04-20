@@ -23,7 +23,7 @@ def get_layoffs():
 def get_layoffs_id(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('select layoffs.*, companies.name as company_name from layoffs join companies on layoffs.company_id = companies.id where layoffs.id = %s', (id))
+        cursor.execute('select layoffs.layoffs.*, layoffs.companies.name as company_name from layoffs.layoffs join layoffs.companies on layoffs.company_id = layoffs.companies.id where layoffs.id = %s order by layoffs.layoffs.employee_count', (id))
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
