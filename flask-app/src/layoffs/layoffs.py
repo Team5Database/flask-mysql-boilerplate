@@ -1,4 +1,3 @@
-# comment for fun
 from flask import request, Blueprint, request, jsonify, make_response
 from src import db
 
