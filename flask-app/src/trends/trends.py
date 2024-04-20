@@ -1,19 +1,18 @@
-from flask import send_file, jsonify, make_response, Blueprint
+from flask import jsonify, make_response, Blueprint
 from src import db
-import io
 
 trends = Blueprint('trends', __name__)
 
-@trends.route('/trends', methods=['GET'])
+@trends.route('/', methods=['GET'])
 def get_trends():
     cursor = db.get_db().cursor()
     cursor.execute('SELECT created_at, COUNT(*) as count FROM layoffs GROUP BY created_at')
-    data = cursor.fetchall()
-    
-    if not data:
-        return make_response(jsonify({"message": "No layoff data available to generate trends"}), 404)
-
-    reasons = [row[0] for row in data]
-    counts = [row[1] for row in data]
-    
-    return reasons, counts
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    the_response = make_response(jsonify(json_data))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response

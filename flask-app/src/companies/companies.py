@@ -6,7 +6,7 @@ companies = Blueprint('companies', __name__)
 @companies.route('/', methods=['GET'])
 def get_companies():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT company, COUNT(*) as count FROM layoffs GROUP BY company')
+    cursor.execute('SELECT layoffs.companies.* FROM layoffs.companies')
     data = cursor.fetchall()
     row_headers = [x[0] for x in cursor.description]
     json_data = []
@@ -18,11 +18,11 @@ def get_companies():
     the_response.mimetype = 'application/json'
     return the_response
 
-@companies.route('/<company>', methods=['GET', 'PUT', 'DELETE'])
-def get_company(company):
+@companies.route('/<company_id>', methods=['GET', 'PUT', 'DELETE'])
+def get_company(company_id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('select * from layoffs where company = %s', (company))
+        cursor.execute('SELECT layoffs.companies.* FROM layoffs.companies WHERE id = %s', (company_id))
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -35,8 +35,8 @@ def get_company(company):
     
     elif request.method == 'PUT':
         cursor = db.get_db().cursor()
-        cursor.execute('update layoffs set company=%s, layoff_date=%s, layoff_count=%s where id=%s', 
-            (request.json['company'], request.json['layoff_date'], request.json['layoff_count'], request.json['id']))
+        cursor.execute('update layoffs.companies set name = %s, company_size = %s, created_at = %s, updated_at = %s', 
+            (request.json['company_id'], request.json['layoff_date'], request.json['layoff_count'], request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Layoff updated"}))
         the_response.status_code = 200
@@ -45,7 +45,7 @@ def get_company(company):
     
     elif request.method == 'DELETE':
         cursor = db.get_db().cursor()
-        cursor.execute('delete from layoffs where id = %s', (request.json['id']))
+        cursor.execute('delete from layoffs.companies where id = %s', (request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Layoff deleted"}))
         the_response.status_code = 200
