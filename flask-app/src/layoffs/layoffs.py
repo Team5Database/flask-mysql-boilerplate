@@ -1,3 +1,4 @@
+# comment for fun
 from flask import request, Blueprint, request, jsonify, make_response
 from src import db
 
@@ -8,7 +9,7 @@ layoffs = Blueprint('layoffs', __name__)
 def get_layoffs():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('select * from layoffs')
+        cursor.execute('select * from layoffs.layoffs join layoffs.companies on layoffs.company_id = companies.id')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
