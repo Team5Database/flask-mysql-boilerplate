@@ -44,9 +44,5 @@ def create_app():
     app.register_blueprint(companies,   url_prefix='/companies')
     app.register_blueprint(forum,       url_prefix='/forum')
     app.register_blueprint(resources,   url_prefix='/resources')
-    
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('/templates/404.html'), 404
 
     return app

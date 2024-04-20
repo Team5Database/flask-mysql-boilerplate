@@ -1,7 +1,6 @@
 CREATE
 DATABASE layoffs;
-USE
-layoffs;
+USE layoffs;
 
 -- Define Database:
 DROP TABLE IF EXISTS `users`;

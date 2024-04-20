@@ -28,7 +28,7 @@ services:
   # configure the mysql container
   db:
     # We are using the base image of MySQL v.8
-    image: mysql:8
+    build: ./db
     container_name: db
     volumes:
       # anything in (or mounted in) /docker-entrypoint-initdb.d in the container 
