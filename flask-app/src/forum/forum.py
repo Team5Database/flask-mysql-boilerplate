@@ -7,7 +7,7 @@ forum = Blueprint('forum', __name__)
 def get_forum():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT * FROM forum')
+        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -20,8 +20,8 @@ def get_forum():
     
     elif request.method == 'POST':
         cursor = db.get_db().cursor()
-        cursor.execute('insert into forum (title, content, user_id) values (%s, %s, %s)', 
-            (request.json['title'], request.json['content'], request.json['user_id']))
+        cursor.execute('INSERT INTO layoffs.posts (id, title, content, user_id) values (%s, %s, %s, %s)', 
+            (1, request.json['title'], request.json['content'], request.json['user_id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post created"}))
         the_response.status_code = 200
