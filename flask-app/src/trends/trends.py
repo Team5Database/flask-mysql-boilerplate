@@ -6,7 +6,7 @@ trends = Blueprint('trends', __name__)
 @trends.route('/byevent', methods=['GET'])
 def get_trends_byevent():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT created_at, COUNT(*) as count FROM layoffs.layoffs GROUP BY created_at')
+    cursor.execute('SELECT YEAR(created_at) as year, MONTH(created_at) as month, COUNT(*) as count FROM layoffs.layoffs GROUP BY YEAR(created_at), MONTH(created_at)')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
