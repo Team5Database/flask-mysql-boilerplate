@@ -9,7 +9,7 @@ layoffs = Blueprint('layoffs', __name__)
 def get_layoffs():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('select * from layoffs.layoffs join layoffs.companies on layoffs.company_id = companies.id')
+        cursor.execute('select layoffs.*, companies.name as company_name from layoffs join companies on layoffs.company_id = companies.id')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -53,7 +53,7 @@ def get_layoffs():
 def get_layoffs_id(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('select * from layoffs where id = %s', (id))
+        cursor.execute('select layoffs.*, companies.name as company_name from layoffs join companies on layoffs.company_id = companies.id where layoffs.id = %s', (id))
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
