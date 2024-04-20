@@ -163,10 +163,14 @@ export default {
 /* Router Transition */
 .fade-enter-active,
 .fade-leave-active {
-	transition: all 0.3s ease;
+	transition: all 0.3s ease-in-out;
 }
 
-.fade-enter-from,
+.fade-enter-from {
+	opacity: 0;
+	transform: translateX(-17px); /* fix echart animation */
+}
+
 .fade-leave-to {
 	opacity: 0;
 	transform: translateX(17px);

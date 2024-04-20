@@ -11,6 +11,26 @@ export const layoffs = {
     list: () => get(baseUrl + "/layoffs/", defaultCallback),
 }
 
+export const trends = {
+    get_by_people: () => get(baseUrl + "/trends/bypeople", defaultCallback),
+    get_by_events: () => get(baseUrl + "/trends/byevents", defaultCallback),
+}
+
+export const companies = {
+    get: (id) => get(baseUrl + "/companies/" + id, defaultCallback),
+    list: () => get(baseUrl + "/companies/", defaultCallback),
+}
+
+export const forum = {
+    get: (id) => get(baseUrl + "/forum/" + id, defaultCallback),
+    list: () => get(baseUrl + "/forum/", defaultCallback),
+}
+
+export const resources = {
+    get: (id) => get(baseUrl + "/resources/" + id, defaultCallback),
+    list: () => get(baseUrl + "/resources/", defaultCallback),
+}
+
 export const defaultCallback = {
     succeed: (res) => {
         return res
@@ -27,4 +47,6 @@ export const defaultCallback = {
 
 export const Api = {
     layoffs,
+    trends,
+    companies,
 }
