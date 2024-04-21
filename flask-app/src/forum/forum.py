@@ -7,7 +7,7 @@ forum = Blueprint('forum', __name__)
 def get_forum():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts')
+        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts order by updated_at')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -46,4 +46,19 @@ def get_forum():
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
-    
+
+# how to I add a route to reply to a post?
+@forum.route('/replies/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def get_forum_replies(id):
+    if request.method == 'GET':
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts where layoffs.posts.parent_post_id = %s order by updated_at', (id))
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        the_response = make_response(jsonify(json_data))
+        the_response.status_code = 200
+        the_response.mimetype = 'application/json'
+        return the_response

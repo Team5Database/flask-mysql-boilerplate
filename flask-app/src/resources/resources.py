@@ -7,7 +7,7 @@ resources = Blueprint('resources', __name__)
 def get_resources():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT * FROM layoffs.articles')
+        cursor.execute('SELECT * FROM layoffs.articles order by updated_at')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
@@ -40,9 +40,24 @@ def get_resources():
     
     elif request.method == 'DELETE':
         cursor = db.get_db().cursor()
-        cursor.execute('delete from layoffs.articles where id = %s', (request.json['id']))
+        cursor.execute('delete from layoffs.articles where layoffs.articles.id = %s', (request.json['id']))
         db.get_db().commit()
         the_response = make_response(jsonify({"message": "Post deleted"}))
+        the_response.status_code = 200
+        the_response.mimetype = 'application/json'
+        return the_response
+    
+@resources.route('/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def get_resources(id):
+    if request.method == 'GET':
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT * FROM layoffs.articles where layoffs.articles.id = %s', (id))
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        the_response = make_response(jsonify(json_data))
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
