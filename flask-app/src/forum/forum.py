@@ -66,7 +66,7 @@ def get_forum_id(id):
 def get_forum_replies(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts where layoffs.posts.parent_post_id = %s order by updated_at', (id))
+        cursor.execute('SELECT layoffs.posts.*, layoffs.users.username FROM layoffs.posts join layoffs.users on posts.user_id = users.id where layoffs.posts.parent_post_id = %s order by updated_at', (id))
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()
