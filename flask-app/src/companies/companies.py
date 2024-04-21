@@ -6,7 +6,7 @@ companies = Blueprint('companies', __name__)
 @companies.route('/', methods=['GET'])
 def get_companies():
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT layoffs.companies.* FROM layoffs.companies order by layoffs.companies.company_size')
+    cursor.execute('SELECT layoffs.companies.* FROM layoffs.companies order by layoffs.companies.company_size DESC')
     data = cursor.fetchall()
     row_headers = [x[0] for x in cursor.description]
     json_data = []

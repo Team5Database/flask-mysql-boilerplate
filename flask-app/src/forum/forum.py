@@ -7,7 +7,7 @@ forum = Blueprint('forum', __name__)
 def get_forum():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
-        cursor.execute('SELECT layoffs.posts.* FROM layoffs.posts order by updated_at')
+        cursor.execute('SELECT layoffs.posts.*, count(layoffs.posts.parent_post_id) as replies_count, layoffs.users.username, layoffs.layoffs.company_id, layoffs.layoffs.reason, layoffs.companies.name as company_name FROM layoffs.posts left join layoffs.posts as replies on layoffs.posts.id = replies.parent_post_id join layoffs.users on layoffs.posts.user_id = layoffs.users.id join layoffs.layoffs on posts.event_id = layoffs.id join layoffs.companies on layoffs.company_id = companies.id group by layoffs.posts.id order by layoffs.posts.updated_at')
         row_headers = [x[0] for x in cursor.description]
         json_data = []
         theData = cursor.fetchall()

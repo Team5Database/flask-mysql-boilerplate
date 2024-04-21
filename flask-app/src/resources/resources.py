@@ -48,7 +48,7 @@ def get_resources():
         return the_response
     
 @resources.route('/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
-def get_resources(id):
+def get_resources_id(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
         cursor.execute('SELECT * FROM layoffs.articles where layoffs.articles.id = %s', (id))
