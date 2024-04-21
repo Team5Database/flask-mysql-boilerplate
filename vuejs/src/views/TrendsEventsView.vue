@@ -50,6 +50,7 @@ export default {
 	},
 	methods: {
 		fetchData() {
+			this.loading = true
 			Api.trends.get_by_events().then((response) => {
 				this.loading = false
 				this.option.xAxis.data = response.map((item) => `${item.year}-${item.month}`)

@@ -24,6 +24,10 @@ export const companies = {
 export const forum = {
     get: (id) => get(baseUrl + "/forum/" + id, defaultCallback),
     list: () => get(baseUrl + "/forum/", defaultCallback),
+    replies: {
+        get: (id) => get(baseUrl + "/forum/replies/" + id, defaultCallback),
+        post: (id, content) => post(baseUrl + "/forum/replies/" + id, { content }, defaultCallback),
+    }
 }
 
 export const resources = {
@@ -49,4 +53,6 @@ export const Api = {
     layoffs,
     trends,
     companies,
+    forum,
+    resources,
 }

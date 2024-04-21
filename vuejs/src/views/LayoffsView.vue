@@ -29,6 +29,9 @@ export default {
 				pageSize: 10,
 				total: 0,
 				showSizeChanger: true,
+				onChange: (page) => {
+					this.pagination.current = page
+				},
 			},
 			columns: [
 				{

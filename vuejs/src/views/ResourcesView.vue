@@ -1,25 +1,16 @@
-<style scoped></style>
-
 <template>
 	<div>
-		<a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData">
+		<a-list item-layout="vertical" size="large" :pagination="pagination" :data-source="listData" :loading="loading">
 			<template #renderItem="{ item }">
 				<a-list-item key="item.title">
-					<template #actions>
-						<span v-for="{ icon, text } in actions" :key="icon">
-							<component :is="icon" style="margin-right: 8px" />
-							{{ text }}
-						</span>
-					</template>
-					<a-list-item-meta :description="item.description">
+					<a-list-item-meta :description="getDateTimeString(item.updated_at)">
 						<template #title>
-							<a :href="item.href">{{ item.title }}</a>
-						</template>
-						<template #avatar>
-							<UserOutlined />
+							<a @click="goToPost(item.id)">{{ item.title }}</a>
 						</template>
 					</a-list-item-meta>
-					{{ item.content }}
+					<a class="post-content" @click="goToPost(item.id)">
+						<div v-html="item.content"></div>
+					</a>
 				</a-list-item>
 			</template>
 		</a-list>
@@ -27,52 +18,47 @@
 </template>
 
 <script>
-import { StarOutlined, LikeOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { Api } from '@/api/api'
+import datetime from '@/utils/datetime'
+import { LikeOutlined, MessageOutlined, UserOutlined } from '@ant-design/icons-vue'
 
 export default {
 	name: 'ResourcesView',
 	components: {
-		StarOutlined,
 		LikeOutlined,
 		MessageOutlined,
 		UserOutlined,
 	},
 	data() {
 		return {
-			actions: [
-				{ icon: 'StarOutlined', text: '156' },
-				{ icon: 'LikeOutlined', text: '156' },
-				{ icon: 'MessageOutlined', text: '2' },
-			],
+			loading: false,
 			listData: [],
 			pagination: {
 				current: 1,
-				pageSize: 4,
-				total: 23,
+				total: 0,
 				onChange: (page) => {
-					console.log(page)
 					this.pagination.current = page
 				},
 			},
 		}
 	},
+	methods: {
+		fetchData() {
+			Api.resources.list().then((response) => {
+				this.listData = response
+				this.pagination.total = response.length
+			})
+		},
+		getDateTimeString(timeStr) {
+			return datetime.toDateTimeString(timeStr)
+		},
+		goToPost(id) {
+			this.$router.push({ name: 'resources-article', params: { id } })
+		},
+	},
 	mounted() {
 		this.fetchData()
 	},
-	methods: {
-		fetchData() {
-			for (let i = 0; i < 23; i++) {
-				this.listData.push({
-					href: 'https://www.antdv.com/',
-					title: `ant design vue part ${i}`,
-					description:
-						'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-					content:
-						'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-				});
-			}
-		}
-	}
 }
 </script>
 
@@ -82,6 +68,20 @@ export default {
 	margin-bottom: auto;
 	margin-left: 8px;
 	margin-right: 16px;
+}
+
+:deep(.ant-list-item-meta-title)>a {
+	margin-top: 0;
+	margin-block-end: 3px;
+	font-weight: bold;
+}
+
+.post-content {
+	color: black;
+}
+
+.post-content:hover {
+	color: #69b1ff;
 }
 
 :deep(.ant-pagination) {
