@@ -44,7 +44,9 @@ export default {
 	},
 	methods: {
 		fetchData() {
+			this.loading = true
 			Api.resources.list().then((response) => {
+				this.loading = false
 				this.listData = response
 				this.pagination.total = response.length
 			})
