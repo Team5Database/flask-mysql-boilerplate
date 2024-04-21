@@ -87,7 +87,7 @@ def get_forum_replies(id):
         return the_response
     
 @forum.route('/replies/<id>/like', methods=['POST'])
-def get_forum_replies(id):
+def post_replies_like(id):
     cursor = db.get_db().cursor()
     cursor.execute('update layoffs.posts set likes = likes + 1 where id = %s', (id))
     db.get_db().commit()
