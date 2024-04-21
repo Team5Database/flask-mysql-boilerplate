@@ -62,18 +62,7 @@ def get_forum_id(id):
         the_response.mimetype = 'application/json'
         return the_response
 
-@forum.route('/reply/<parent_post_id>', methods=['POST'])
-def post_forum_reply(parent_post_id):
-    cursor = db.get_db().cursor()
-    cursor.execute('INSERT INTO layoffs.posts (content, user_id, parent_post_id) values (%s, %s, %s)', 
-        (request.json['content'], 1, parent_post_id))
-    db.get_db().commit()
-    the_response = make_response(jsonify({"message": "Post created"}))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-@forum.route('/replies/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@forum.route('/replies/<id>', methods=['GET', 'POST'])
 def get_forum_replies(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
@@ -84,6 +73,15 @@ def get_forum_replies(id):
         for row in theData:
             json_data.append(dict(zip(row_headers, row)))
         the_response = make_response(jsonify(json_data))
+        the_response.status_code = 200
+        the_response.mimetype = 'application/json'
+        return the_response
+    elif request.method == "POST":
+        cursor = db.get_db().cursor()
+        cursor.execute('INSERT INTO layoffs.posts (content, user_id, parent_post_id) values (%s, %s, %s)', 
+            (request.json['content'], 1, id))
+        db.get_db().commit()
+        the_response = make_response(jsonify({"message": "Post created"}))
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
