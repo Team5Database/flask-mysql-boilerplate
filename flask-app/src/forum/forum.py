@@ -85,3 +85,14 @@ def get_forum_replies(id):
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
+    
+@forum.route('/replies/<id>/like', methods=['POST'])
+def get_forum_replies(id):
+    cursor = db.get_db().cursor()
+    cursor.execute('update layoffs.posts set likes = likes + 1 where id = %s', (id))
+    db.get_db().commit()
+    the_response = make_response(jsonify({"message": "Post liked"}))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+    
