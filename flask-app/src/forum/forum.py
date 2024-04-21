@@ -47,7 +47,21 @@ def get_forum():
         the_response.mimetype = 'application/json'
         return the_response
 
-# how to I add a route to reply to a post?
+@forum.route('/<id>', methods=['GET'])
+def get_forum_id(id):
+    if request.method == 'GET':
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT layoffs.posts.*, count(layoffs.posts.parent_post_id) as replies_count, layoffs.users.username, layoffs.layoffs.company_id, layoffs.layoffs.reason, layoffs.companies.name as company_name FROM layoffs.posts left join layoffs.posts as replies on layoffs.posts.id = replies.parent_post_id join layoffs.users on layoffs.posts.user_id = layoffs.users.id join layoffs.layoffs on posts.event_id = layoffs.id join layoffs.companies on layoffs.company_id = companies.id where layoffs.posts.parent_post_id IS NULL and layoffs.posts.id = %s group by layoffs.posts.id order by layoffs.posts.updated_at', (id))
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        the_response = make_response(jsonify(json_data))
+        the_response.status_code = 200
+        the_response.mimetype = 'application/json'
+        return the_response
+
 @forum.route('/replies/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def get_forum_replies(id):
     if request.method == 'GET':
