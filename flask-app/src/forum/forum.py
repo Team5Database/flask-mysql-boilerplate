@@ -3,7 +3,7 @@ from src import db
 
 forum = Blueprint('forum', __name__)
 
-@forum.route('/', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@forum.route('/', methods=['GET'])
 def get_forum():
     if request.method == 'GET':
         cursor = db.get_db().cursor()
@@ -18,7 +18,7 @@ def get_forum():
         the_response.mimetype = 'application/json'
         return the_response
 
-@forum.route('/<id>', methods=['GET'])
+@forum.route('/<id>', methods=['GET', 'DELETE'])
 def get_forum_id(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
