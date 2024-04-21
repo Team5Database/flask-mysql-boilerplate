@@ -27,7 +27,8 @@ export const forum = {
     replies: {
         get: (id) => get(baseUrl + "/forum/replies/" + id, defaultCallback),
         post: (id, content) => post(baseUrl + "/forum/replies/" + id, { content }, defaultCallback),
-    }
+    },
+    like: (id) => post(baseUrl + "/forum/" + id + "/like", {}, defaultCallback),
 }
 
 export const resources = {
