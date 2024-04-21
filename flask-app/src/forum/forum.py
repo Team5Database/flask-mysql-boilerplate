@@ -89,7 +89,7 @@ def get_forum_replies(id):
 @forum.route('/replies/<id>/like', methods=['POST'])
 def post_replies_like(id):
     cursor = db.get_db().cursor()
-    cursor.execute('update layoffs.posts set likes = likes + 1 where id = %s', (id))
+    cursor.execute('update layoffs.posts set like_count = like_count + 1 where id = %s', (id))
     db.get_db().commit()
     the_response = make_response(jsonify({"message": "Post liked"}))
     the_response.status_code = 200
