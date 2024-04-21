@@ -62,11 +62,11 @@ def get_forum_id(id):
         the_response.mimetype = 'application/json'
         return the_response
 
-@forum.route('/reply', methods=['POST'])
-def post_forum_reply():
+@forum.route('/reply/<parent_post_id>', methods=['POST'])
+def post_forum_reply(parent_post_id):
     cursor = db.get_db().cursor()
-    cursor.execute('INSERT INTO layoffs.posts (content, user_id) values (%s, %s)', 
-        (request.json['content'], 1))
+    cursor.execute('INSERT INTO layoffs.posts (content, user_id, parent_post_id) values (%s, %s, %s)', 
+        (request.json['content'], 1, parent_post_id))
     db.get_db().commit()
     the_response = make_response(jsonify({"message": "Post created"}))
     the_response.status_code = 200
