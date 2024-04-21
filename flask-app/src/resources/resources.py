@@ -47,7 +47,7 @@ def get_resources():
         the_response.mimetype = 'application/json'
         return the_response
     
-@resources.route('/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@resources.route('/<id>', methods=['GET'])
 def get_resources_id(id):
     if request.method == 'GET':
         cursor = db.get_db().cursor()
