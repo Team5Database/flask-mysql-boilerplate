@@ -48,6 +48,7 @@ export default {
 .content {
 	padding: 81px;
 	padding-bottom: 0;
+	font-size: 16px;
 }
 
 .header {
@@ -66,9 +67,5 @@ export default {
 .header .meta {
 	font-size: 16px;
 	color: #999;
-}
-
-.content {
-	font-size: 16px;
 }
 </style>

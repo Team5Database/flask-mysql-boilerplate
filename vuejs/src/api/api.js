@@ -1,8 +1,7 @@
 import { get, post, del } from "@/utils/request"
 import { message } from 'ant-design-vue'
 
-// const getBaseUrl = () => `http://${location.hostname}:60001`
-const getBaseUrl = () => `http://43.153.136.233:60001`
+const getBaseUrl = () => `http://${location.hostname}:60001`
 
 export const baseUrl = getBaseUrl()
 
