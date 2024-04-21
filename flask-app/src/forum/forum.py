@@ -17,35 +17,6 @@ def get_forum():
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
-    
-    elif request.method == 'POST':
-        cursor = db.get_db().cursor()
-        cursor.execute('INSERT INTO layoffs.posts (title, content, user_id) values (%s, %s, %s, %s)', 
-            (request.json['title'], request.json['content'], 1))
-        db.get_db().commit()
-        the_response = make_response(jsonify({"message": "Post created"}))
-        the_response.status_code = 200
-        the_response.mimetype = 'application/json'
-        return the_response
-    
-    elif request.method == 'PUT':
-        cursor = db.get_db().cursor()
-        cursor.execute('update layoffs.posts set title=%s, content=%s, user_id=%s where id=%s', 
-            (request.json['title'], request.json['content'], 1, request.json['id']))
-        db.get_db().commit()
-        the_response = make_response(jsonify({"message": "Post updated"}))
-        the_response.status_code = 200
-        the_response.mimetype = 'application/json'
-        return the_response
-    
-    elif request.method == 'DELETE':
-        cursor = db.get_db().cursor()
-        cursor.execute('delete from layoffs.posts where id = %s', (request.json['id']))
-        db.get_db().commit()
-        the_response = make_response(jsonify({"message": "Post deleted"}))
-        the_response.status_code = 200
-        the_response.mimetype = 'application/json'
-        return the_response
 
 @forum.route('/<id>', methods=['GET'])
 def get_forum_id(id):
@@ -58,6 +29,15 @@ def get_forum_id(id):
         for row in theData:
             json_data.append(dict(zip(row_headers, row)))
         the_response = make_response(jsonify(json_data))
+        the_response.status_code = 200
+        the_response.mimetype = 'application/json'
+        return the_response
+    
+    elif request.method == 'DELETE':
+        cursor = db.get_db().cursor()
+        cursor.execute('delete from layoffs.posts where id = %s', (id))
+        db.get_db().commit()
+        the_response = make_response(jsonify({"message": "Post deleted"}))
         the_response.status_code = 200
         the_response.mimetype = 'application/json'
         return the_response
