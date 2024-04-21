@@ -51,10 +51,10 @@
 								</a-avatar>
 							</template>
 							<template #actions>
-								<span>
+								<a @click="handleLike(item.id)">
 									<LikeOutlined />
 									{{ item.like_count }}
-								</span>
+								</a>
 							</template>
 							<template #content>
 								<p v-html="item.content"></p>
@@ -111,6 +111,11 @@ export default {
 			Api.forum.replies.post(this.$route.params.id, this.comment).then(() => {
 				this.submitting = false
 				this.value = ''
+				this.fetchData()
+			})
+		},
+		handleLike(id) {
+			Api.forum.replies.like(id).then(() => {
 				this.fetchData()
 			})
 		},
