@@ -4,14 +4,14 @@
 			<template #renderItem="{ item }">
 				<a-list-item key="item.title">
 					<template #actions>
-						<span>
+						<a-button @click="handleLike(item.id)">
 							<LikeOutlined />
 							{{ item.like_count }}
-						</span>
-						<span>
+						</a-button>
+						<a-button @click="goToPost(item.id)">
 							<MessageOutlined />
-							2
-						</span>
+							{{ item.replies_count }}
+						</a-button>
 					</template>
 					<a-list-item-meta :description="getDateTimeString(item.updated_at)">
 						<template #title>
@@ -76,6 +76,11 @@ export default {
 		},
 		goToPost(id) {
 			this.$router.push({ name: 'forums-post', params: { id } })
+		},
+		handleLike(id) {
+			Api.forum.like(id).then(() => {
+				this.fetchData()
+			})
 		},
 	},
 	mounted() {

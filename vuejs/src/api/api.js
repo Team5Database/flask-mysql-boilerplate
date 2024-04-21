@@ -1,4 +1,4 @@
-import { get, post } from "@/utils/request"
+import { get, post, del } from "@/utils/request"
 import { message } from 'ant-design-vue'
 
 // const getBaseUrl = () => `http://${location.hostname}:60001`
@@ -29,6 +29,7 @@ export const forum = {
         post: (id, content) => post(baseUrl + "/forum/replies/" + id, { content }, defaultCallback),
     },
     like: (id) => post(baseUrl + "/forum/" + id + "/like", {}, defaultCallback),
+    delete: (id) => del(baseUrl + "/forum/" + id, defaultCallback),
 }
 
 export const resources = {

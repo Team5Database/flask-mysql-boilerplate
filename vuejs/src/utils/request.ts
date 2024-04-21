@@ -90,6 +90,33 @@ export const put = (url: string, data: RequestInit["body"], callback: Callback, 
     })
 }
 
+export const del = (url: string, data: RequestInit["body"], callback: Callback, {ct = 'application/json', isJSON = true} = {}) => {
+    return fetch(url, {
+        method: "DELETE",
+        headers: setHeader(ct),
+        body: typeof (data) == 'string' ? data : JSON.stringify(data)
+    }).then((res: Response): void | Promise<void> | Response => {
+        switch (res.status) {
+            case 200:
+                if (isJSON && callback?.succeed) return res.json().then(callback.succeed)
+                else if (callback?.succeed) return res.text().then(callback.succeed)
+                break
+
+            case 400:
+                if (callback?.failed) return res.text().then(callback.failed)
+
+            default:
+                console.log(res.status)
+                if (callback?.failed) return res.text().then(callback.failed)
+        }
+        return res
+    }).catch(function (err) {
+        console.log(err)
+        if (callback?.network_error) callback.network_error(err)
+        return Promise.reject()
+    })
+}
+
 export const eventStream = (url: string, method: string, data: RequestInit["body"], callback: Callback, {ct = 'application/json'} = {}) => {
     return fetch(url, {
         method: method,

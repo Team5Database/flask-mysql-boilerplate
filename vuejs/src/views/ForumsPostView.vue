@@ -51,10 +51,17 @@
 								</a-avatar>
 							</template>
 							<template #actions>
-								<a @click="handleLike(item.id)">
-									<LikeOutlined />
-									{{ item.like_count }}
-								</a>
+								<span>
+									<a @click="handleLike(item.id)">
+										<LikeOutlined />
+										{{ item.like_count }}
+									</a>
+								</span>
+								<span>
+									<a @click="handleDelete(item.id)">
+										<DeleteOutlined />
+									</a>
+								</span>
 							</template>
 							<template #content>
 								<p v-html="item.content"></p>
@@ -75,13 +82,14 @@
 <script>
 import { Api } from '@/api/api'
 import datetime from '@/utils/datetime'
-import { UserOutlined, LikeOutlined } from '@ant-design/icons-vue'
+import { UserOutlined, LikeOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 
 export default {
 	name: 'ForumsPostView',
 	components: {
 		UserOutlined,
 		LikeOutlined,
+		DeleteOutlined,
 	},
 	data() {
 		return {
@@ -110,12 +118,17 @@ export default {
 			this.submitting = true
 			Api.forum.replies.post(this.$route.params.id, this.comment).then(() => {
 				this.submitting = false
-				this.value = ''
+				this.comment = ''
 				this.fetchData()
 			})
 		},
 		handleLike(id) {
-			Api.forum.replies.like(id).then(() => {
+			Api.forum.like(id).then(() => {
+				this.fetchData()
+			})
+		},
+		handleDelete(id) {
+			Api.forum.delete(id).then(() => {
 				this.fetchData()
 			})
 		},
