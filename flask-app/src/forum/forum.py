@@ -62,6 +62,17 @@ def get_forum_id(id):
         the_response.mimetype = 'application/json'
         return the_response
 
+@forum.route('/reply', methods=['POST'])
+def post_forum_reply():
+    cursor = db.get_db().cursor()
+    cursor.execute('INSERT INTO layoffs.posts (content, user_id) values (%s, %s)', 
+        (request.json['content'], 1))
+    db.get_db().commit()
+    the_response = make_response(jsonify({"message": "Post created"}))
+    the_response.status_code = 200
+    the_response.mimetype = 'application/json'
+    return the_response
+
 @forum.route('/replies/<id>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def get_forum_replies(id):
     if request.method == 'GET':
